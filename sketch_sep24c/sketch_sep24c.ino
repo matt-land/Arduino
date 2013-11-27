@@ -1,3 +1,4 @@
+
 #include <LiquidCrystal.h>
 #include <stdlib.h>
 const int width = 16;
@@ -5,6 +6,7 @@ const int height = 2;
 const int RS = 8;
 const int RW = 11;
 const int Enable = 9;
+const int delayTime = 40;
 LiquidCrystal lcd(RS, RW, Enable, 4, 5, 6, 7);
 
 
@@ -18,9 +20,16 @@ void setup() {
   for (int i = 0; i < width; i++) {
     for (int j = 0; j < height; j++) {
       //assign a random value to each display position
-      myLcd[i][j] = rand() % 10; 
+      myLcd[i][j] = rand() % 10;
+      writePosition(i, j, myLcd[i][j]); 
     }  
   }
+}
+
+void writePosition(int x, int y, int value) 
+{
+  lcd.setCursor(x, y);
+  lcd.print(value);
 }
 
 int updateValue(int& value) {
@@ -31,22 +40,17 @@ int updateValue(int& value) {
   }
 }
 
+
 void updateLcdDisplay()
 {
-  for (int i = 0; i < width; i++) {
-    for (int j = 0; j < height; j++) {
-      updateValue(myLcd[i][j]);
-
-      lcd.setCursor(i, j);
-      lcd.print(updateValue(myLcd[i][j]));
-      delay(70);
-    }
-  }
+  int w = rand() % width;
+  int h = rand() % height;
+  writePosition(w, h, updateValue(myLcd[w][h]));
+  delay(delayTime);
 }
   
 void loop() 
 {
   updateLcdDisplay();
-  
 }
 
